@@ -8,6 +8,16 @@ from flask_login import UserMixin
 from app import db, login
 
 
+# Representing Users as both followers and the followed
+# self-referential relationship (many-to-many) which requires
+# an association table
+followers = db.Table(
+    'followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
